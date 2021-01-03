@@ -45,7 +45,11 @@ module IRuby
 
     def eval(code, store_history)
       @irb.context.evaluate(code, 0)
-      @irb.context.last_value
+      @irb.context.last_value unless assignment_expression?(code)
+    end
+
+    def assignment_expression?(code)
+      @irb.respond_to?(:assignment_expression?, true) && @irb.send(:assignment_expression?, code)
     end
 
     def complete(code)
